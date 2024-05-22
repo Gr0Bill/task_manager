@@ -48,6 +48,7 @@ if not (tom_weekly or nuf_weekly or tom_monthly or nuf_monthly or tom_bi_monthly
     tom_monthly, nuf_monthly = assign_tasks_equally(tasks['monthly'])
     tom_bi_monthly, nuf_bi_monthly = assign_tasks_equally(tasks['bi_monthly'])
 
+
 # Streamlit Layout
 st.title("Les tâches de mimi et mimo")
 
