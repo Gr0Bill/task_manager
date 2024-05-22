@@ -49,36 +49,36 @@ if not (tom_weekly or nuf_weekly or tom_monthly or nuf_monthly or tom_bi_monthly
     tom_bi_monthly, nuf_bi_monthly = assign_tasks_equally(tasks['bi_monthly'])
 
 # Streamlit Layout
-st.title("Task Assignment")
+st.title("Les tâches de mimi et mimo")
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.header("Tom's Tasks")
+    st.header("Tâches de mimo")
     if tom_weekly:
-        st.subheader("Weekly")
+        st.subheader("Hebdomadaire")
         for task in tom_weekly:
             st.write(task)
     if tom_monthly:
-        st.subheader("Monthly")
+        st.subheader("mensuel")
         for task in tom_monthly:
             st.write(task)
     if tom_bi_monthly:
-        st.subheader("1st and 15th")
+        st.subheader("le 1ier et 15ieme")
         for task in tom_bi_monthly:
             st.write(task)
 
 with col2:
-    st.header("Nuf's Tasks")
+    st.header("Tâches de mimi")
     if nuf_weekly:
-        st.subheader("Weekly")
+        st.subheader("Hebdomadaire")
         for task in nuf_weekly:
             st.write(task)
     if nuf_monthly:
-        st.subheader("Monthly")
+        st.subheader("mensuel")
         for task in nuf_monthly:
             st.write(task)
     if nuf_bi_monthly:
-        st.subheader("1st and 15th")
+        st.subheader("le 1ier et 15ieme")
         for task in nuf_bi_monthly:
             st.write(task)
