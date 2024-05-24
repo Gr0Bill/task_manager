@@ -30,24 +30,45 @@ day = today.day
 weekday = today.strftime('%A')
 
 # Function to assign tasks equally to Tom and Nuf
-def assign_tasks_equally(tasks):
+def assign_tasks_equally(tasks, seed):
+    random.seed(seed)
     random.shuffle(tasks)  # Shuffle the tasks to ensure randomness
     mid_index = len(tasks) // 2
     tom_tasks = tasks[:mid_index]
     nuf_tasks = tasks[mid_index:]
     return tom_tasks, nuf_tasks
 
+# Generate a seed based on the current date
+seed = today.strftime('%Y%m%d')
+
 # Assign tasks based on frequency
-tom_weekly, nuf_weekly = assign_tasks_equally(tasks['weekly']) if weekday == 'Sunday' else ([], [])
-tom_monthly, nuf_monthly = assign_tasks_equally(tasks['monthly']) if day == 1 else ([], [])
-tom_bi_monthly, nuf_bi_monthly = assign_tasks_equally(tasks['bi_monthly']) if day == 1 or day == 15 else ([], [])
+tom_tasks = []
+nuf_tasks = []
+
+if weekday == 'Sunday':
+    tom_weekly, nuf_weekly = assign_tasks_equally(tasks['weekly'], seed)
+    tom_tasks.extend(tom_weekly)
+    nuf_tasks.extend(nuf_weekly)
+if day == 1:
+    tom_monthly, nuf_monthly = assign_tasks_equally(tasks['monthly'], seed)
+    tom_tasks.extend(tom_monthly)
+    nuf_tasks.extend(nuf_monthly)
+if day == 1 or day == 15:
+    tom_bi_monthly, nuf_bi_monthly = assign_tasks_equally(tasks['bi_monthly'], seed)
+    tom_tasks.extend(tom_bi_monthly)
+    nuf_tasks.extend(nuf_bi_monthly)
 
 # If no tasks are assigned, default to weekly and monthly tasks
-if not (tom_weekly or nuf_weekly or tom_monthly or nuf_monthly or tom_bi_monthly or nuf_bi_monthly):
-    tom_weekly, nuf_weekly = assign_tasks_equally(tasks['weekly'])
-    tom_monthly, nuf_monthly = assign_tasks_equally(tasks['monthly'])
-    tom_bi_monthly, nuf_bi_monthly = assign_tasks_equally(tasks['bi_monthly'])
-
+if not tom_tasks and not nuf_tasks:
+    tom_weekly, nuf_weekly = assign_tasks_equally(tasks['weekly'], seed)
+    tom_monthly, nuf_monthly = assign_tasks_equally(tasks['monthly'], seed)
+    tom_bi_monthly, nuf_bi_monthly = assign_tasks_equally(tasks['bi_monthly'], seed)
+    tom_tasks.extend(tom_weekly)
+    tom_tasks.extend(tom_monthly)
+    tom_tasks.extend(tom_bi_monthly)
+    nuf_tasks.extend(nuf_weekly)
+    nuf_tasks.extend(nuf_monthly)
+    nuf_tasks.extend(nuf_bi_monthly)
 
 # Streamlit Layout
 st.title("Les tâches de mimi et mimo")
@@ -56,30 +77,12 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.header("Tâches de mimo")
-    if tom_weekly:
-        st.subheader("Hebdomadaire")
-        for task in tom_weekly:
-            st.write(task)
-    if tom_monthly:
-        st.subheader("mensuel")
-        for task in tom_monthly:
-            st.write(task)
-    if tom_bi_monthly:
-        st.subheader("le 1ier et 15ieme")
-        for task in tom_bi_monthly:
+    if tom_tasks:
+        for task in tom_tasks:
             st.write(task)
 
 with col2:
     st.header("Tâches de mimi")
-    if nuf_weekly:
-        st.subheader("Hebdomadaire")
-        for task in nuf_weekly:
-            st.write(task)
-    if nuf_monthly:
-        st.subheader("mensuel")
-        for task in nuf_monthly:
-            st.write(task)
-    if nuf_bi_monthly:
-        st.subheader("le 1ier et 15ieme")
-        for task in nuf_bi_monthly:
+    if nuf_tasks:
+        for task in nuf_tasks:
             st.write(task)
